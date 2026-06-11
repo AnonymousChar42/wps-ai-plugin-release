@@ -64,7 +64,7 @@ jobs:
 
       - name: Prepare deploy directory
         run: |
-          mkdir -p _deploy
+          mkdir -p _deploy/wps-plugin-excel _deploy/wps-plugin-ppt _deploy/wps-plugin-word
 
           # 复制三个插件的 wps-addon-build 产物
           cp -r wps-plugin-excel/wps-addon-build/* _deploy/wps-plugin-excel/
