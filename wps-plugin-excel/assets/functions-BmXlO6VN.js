@@ -1,0 +1,1 @@
+function d(o,e,s,u,i){let c=n=>`${n}: ${typeof n}`,t=`这是一个加载项自定义函数(${[o,e,s,u,i].map(c).join(", ")})`;return console.log(t),t}wps.AddCustomFunction&&wps.AddCustomFunction("HelloEt","custom_function",d);

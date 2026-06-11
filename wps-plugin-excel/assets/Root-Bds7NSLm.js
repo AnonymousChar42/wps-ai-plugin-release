@@ -1,0 +1,1 @@
+import{c as e,a as o,t as s,_ as r,o as a}from"./index-BZKamEMY.js";import{_ as n}from"./_plugin-vue_export-helper-DlAUqK2U.js";r(()=>import("./functions-BmXlO6VN.js"),[],import.meta.url);const _={name:"wps-assistant",data(){return{msg:"欢迎来到wps加载项的世界!"}}};function c(p,i,m,l,t,u){return a(),e("div",null,[o("h1",null,s(t.msg),1)])}const g=n(_,[["render",c]]);export{g as default};
