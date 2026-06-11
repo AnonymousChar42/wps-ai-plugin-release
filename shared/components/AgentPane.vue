@@ -8,6 +8,17 @@
     <!-- 顶部标题栏 -->
     <div class="agent-header">
       <span class="agent-title">{{ title }}</span>
+      <div class="agent-header-actions">
+        <Popover placement="bottomRight" trigger="click">
+          <template #content>
+            <ApiConfigForm v-model="aiConfig" :url-locked="urlLocked" />
+          </template>
+          <template #title>
+            <span>API配置</span>
+          </template>
+          <Button :icon="h(SettingOutlined)" />
+        </Popover>
+      </div>
     </div>
 
     <!-- 输入区域 -->
@@ -67,10 +78,12 @@
  *   emptyHint   — 输入框占位文案
  *   createAgent — 插件提供的 agent 工厂函数
  */
-import { ref, reactive, computed } from 'vue'
-import { Input, Button } from 'ant-design-vue'
+import { ref, reactive, computed, watch, h } from 'vue'
+import { Input, Button, Popover } from 'ant-design-vue'
+import { SettingOutlined } from '@ant-design/icons-vue'
 import StepProgress from './StepProgress.vue'
-import type { AIRequestConfig } from '@wpsai/shared/types'
+import ApiConfigForm from './ApiConfigForm.vue'
+import type { AIRequestConfig, UrlLocked } from '@wpsai/shared/types'
 import type { AgentStep } from '@wpsai/shared/types/agent'
 import markdownit from 'markdown-it'
 
@@ -104,15 +117,20 @@ const props = defineProps<{
   createAgent: (aiConfig: AIRequestConfig) => AgentStateManager
 }>()
 
-// ===== AI 配置（从环境变量读取） =====
-const aiConfig: AIRequestConfig = {
+// ===== AI 配置（从环境变量初始化，用户可通过 UI 修改） =====
+const aiConfig = ref<AIRequestConfig>({
   baseURL: (import.meta.env.VITE_AI_BASE_URL as string) || '',
   model: (import.meta.env.VITE_AI_MODEL as string) || '',
   apiKey: (import.meta.env.VITE_AI_API_KEY as string) || '',
-}
+})
 
-// ===== 智能体状态管理 =====
-const agent: AgentStateManager = props.createAgent(aiConfig)
+// ===== URL 锁定（环境变量控制是否允许修改 baseURL） =====
+const urlLocked = computed<UrlLocked>(() => ({
+  baseURL: import.meta.env.VITE_AI_BASE_URL_LOCKED === 'true'
+}))
+
+// ===== 智能体状态管理（随配置变化自动重建） =====
+const agent = ref<AgentStateManager>(props.createAgent(aiConfig.value))
 
 const agentState = reactive<AgentRunState>({
   steps: [],
@@ -122,13 +140,29 @@ const agentState = reactive<AgentRunState>({
   success: false
 })
 
-agent.onUpdate = (newState) => {
-  agentState.steps = newState.steps
-  agentState.isRunning = newState.isRunning
-  agentState.result = newState.result
-  agentState.error = newState.error
-  agentState.success = newState.success
+function bindAgent(a: AgentStateManager): void {
+  a.onUpdate = (newState) => {
+    agentState.steps = newState.steps
+    agentState.isRunning = newState.isRunning
+    agentState.result = newState.result
+    agentState.error = newState.error
+    agentState.success = newState.success
+  }
 }
+
+bindAgent(agent.value)
+
+// 配置变更时重建 agent
+watch(aiConfig, (newConfig) => {
+  const newAgent = props.createAgent({ ...newConfig })
+  bindAgent(newAgent)
+  agent.value = newAgent
+  // 重置界面状态
+  agentState.steps = []
+  agentState.result = ''
+  agentState.error = null
+  agentState.success = false
+}, { deep: true })
 
 // ===== 用户输入 =====
 const inputText = ref('')
@@ -138,7 +172,7 @@ const md = new markdownit({ html: false, breaks: true })
 const renderedResult = computed(() => md.render(agentState.result))
 
 function handleStop(): void {
-  agent.stop()
+  agent.value.stop()
 }
 
 async function handleGenerate(): Promise<void> {
@@ -150,13 +184,13 @@ async function handleGenerate(): Promise<void> {
   agentState.error = null
   agentState.success = false
 
-  if (!aiConfig.apiKey || !aiConfig.baseURL || !aiConfig.model) {
+  if (!aiConfig.value.apiKey || !aiConfig.value.baseURL || !aiConfig.value.model) {
     agentState.error = '请先在 API 配置中设置 Base URL、Model 和 API Key'
     agentState.success = false
     return
   }
 
-  await agent.run(text)
+  await agent.value.run(text)
 
   // 播放简短提示音
   try {
@@ -192,6 +226,7 @@ async function handleGenerate(): Promise<void> {
 .agent-header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 8px;
 }
 
@@ -199,6 +234,12 @@ async function handleGenerate(): Promise<void> {
   font-size: 16px;
   font-weight: 600;
   color: #333333;
+}
+
+.agent-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .agent-input-area {
