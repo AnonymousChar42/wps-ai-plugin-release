@@ -46,8 +46,8 @@ const emit = defineEmits<{
 
 // 表单状态
 const formState = reactive<AIRequestConfig>({
-  baseURL: props.modelValue?.baseURL || '',
-  model: props.modelValue?.model || '',
+  baseURL: props.modelValue?.baseURL || 'https://api.deepseek.com/v1/chat/completions',
+  model: props.modelValue?.model || 'deepseek-v4-flash',
   apiKey: props.modelValue?.apiKey || ''
 })
 
