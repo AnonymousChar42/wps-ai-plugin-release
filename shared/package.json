@@ -1,0 +1,32 @@
+{
+  "name": "@wpsai/shared",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "typecheck": "vue-tsc --noEmit"
+  },
+  "exports": {
+    ".": "./package.json",
+    "./agent": "./agent/index.ts",
+    "./agent/types": "./agent/types.ts",
+    "./agent/themes": "./agent/themes.ts",
+    "./agent/step-history": "./agent/step-history.ts",
+    "./agent/tool-adapter": "./agent/tool-adapter.ts",
+    "./components": "./components",
+    "./components/*": "./components/*",
+    "./config/agents": "./config/agents.js",
+    "./types": "./types/index.ts"
+  },
+  "peerDependencies": {
+    "vue": "catalog:",
+    "ant-design-vue": "catalog:",
+    "@ant-design/icons-vue": "catalog:",
+    "markdown-it": "catalog:",
+    "mermaid": "catalog:",
+    "ant-design-x-vue": "catalog:"
+  },
+  "devDependencies": {
+    "vue-tsc": "catalog:"
+  }
+}

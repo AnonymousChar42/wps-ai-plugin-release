@@ -1,0 +1,15 @@
+{
+  "name": "wpsai-workspace",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "debug:excel": "pnpm --filter wps-assistant debug",
+    "debug:ppt": "pnpm --filter wps-plugin-ppt debug",
+    "debug:word": "pnpm --filter wps-plugin-word debug",
+    "build": "node build.js",
+    "postinstall": "node scripts/fix-wpsjs.cjs"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

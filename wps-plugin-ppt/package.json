@@ -1,0 +1,45 @@
+{
+	"name": "wps-plugin-ppt",
+	"addonType": "wpp",
+	"version": "1.0.0",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"debug": "wpsjs debug",
+		"dev": "vite --port 3889",
+		"build": "vite build",
+		"preview": "vite preview",
+		"test": "vitest run",
+		"test:watch": "vitest",
+		"lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
+		"format": "prettier --write src/"
+	},
+	"dependencies": {
+		"@ant-design/icons-vue": "catalog:",
+		"ant-design-vue": "catalog:",
+		"ant-design-x-vue": "catalog:",
+		"axios": "catalog:",
+		"core-js": "catalog:",
+		"markdown-it": "catalog:",
+		"mermaid": "catalog:",
+		"sa-sdk-javascript": "catalog:",
+		"vconsole": "catalog:",
+		"vconsole-outputlog-plugin": "catalog:",
+		"eruda": "catalog:",
+		"vue": "catalog:",
+		"vue-router": "catalog:"
+	},
+	"devDependencies": {
+		"@rushstack/eslint-patch": "catalog:",
+		"@vitejs/plugin-vue": "catalog:",
+		"@vue/eslint-config-prettier": "catalog:",
+		"eslint": "catalog:",
+		"eslint-plugin-vue": "catalog:",
+		"et-jsapi-declare": "catalog:",
+		"jsdom": "catalog:",
+		"prettier": "catalog:",
+		"vite": "catalog:",
+		"vitest": "catalog:",
+		"wpsjs": "catalog:"
+	}
+}
