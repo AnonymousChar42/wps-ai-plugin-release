@@ -38,14 +38,26 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Install wpsjs CLI
+        run: npm install -g wpsjs
+
       - name: Build wps-plugin-excel
-        run: pnpm --filter wps-assistant build
+        run: |
+          cd wps-plugin-excel
+          echo "在线插件" | wpsjs build
+        shell: bash
 
       - name: Build wps-plugin-ppt
-        run: pnpm --filter wps-plugin-ppt build
+        run: |
+          cd wps-plugin-ppt
+          echo "在线插件" | wpsjs build
+        shell: bash
 
       - name: Build wps-plugin-word
-        run: pnpm --filter wps-plugin-word build
+        run: |
+          cd wps-plugin-word
+          echo "在线插件" | wpsjs build
+        shell: bash
 
       - name: Generate publish page
         run: node publish.js --url https://anonymouschar42.github.io/wps-ai-plugin-release/
@@ -54,10 +66,10 @@ jobs:
         run: |
           mkdir -p _deploy
 
-          # 复制三个插件的构建产物
-          cp -r wps-plugin-excel/dist _deploy/wps-plugin-excel
-          cp -r wps-plugin-ppt/dist _deploy/wps-plugin-ppt
-          cp -r wps-plugin-word/dist _deploy/wps-plugin-word
+          # 复制三个插件的 wps-addon-build 产物
+          cp -r wps-plugin-excel/wps-addon-build/* _deploy/wps-plugin-excel/
+          cp -r wps-plugin-ppt/wps-addon-build/* _deploy/wps-plugin-ppt/
+          cp -r wps-plugin-word/wps-addon-build/* _deploy/wps-plugin-word/
 
           # 用 publish.html 作为入口页（WPS 加载项配置/安装页面）
           cp publish.html _deploy/index.html
