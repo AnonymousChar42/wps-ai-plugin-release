@@ -47,6 +47,9 @@ jobs:
       - name: Build wps-plugin-word
         run: pnpm --filter wps-plugin-word build
 
+      - name: Generate publish page
+        run: node publish.js --url https://anonymouschar42.github.io/wps-ai-plugin-release/
+
       - name: Prepare deploy directory
         run: |
           mkdir -p _deploy
@@ -56,48 +59,8 @@ jobs:
           cp -r wps-plugin-ppt/dist _deploy/wps-plugin-ppt
           cp -r wps-plugin-word/dist _deploy/wps-plugin-word
 
-          # 生成导航入口页
-          cat > _deploy/index.html << 'EOF'
-          <!DOCTYPE html>
-          <html lang="zh-CN">
-          <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>WPS AI Plugin - 发布页面</title>
-            <style>
-              * { margin: 0; padding: 0; box-sizing: border-box; }
-              body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-              .container { background: white; border-radius: 12px; padding: 40px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); max-width: 480px; width: 90%; }
-              h1 { font-size: 24px; margin-bottom: 8px; }
-              p.subtitle { color: #666; margin-bottom: 24px; font-size: 14px; }
-              .plugin-list { display: flex; flex-direction: column; gap: 12px; }
-              .plugin-link { display: block; padding: 16px 20px; background: #f0f7ff; border: 1px solid #d0e3f7; border-radius: 8px; text-decoration: none; color: #1677ff; font-weight: 500; transition: all 0.2s; }
-              .plugin-link:hover { background: #e6f0ff; border-color: #1677ff; }
-              .plugin-link small { display: block; color: #999; font-weight: 400; font-size: 12px; margin-top: 4px; }
-            </style>
-          </head>
-          <body>
-            <div class="container">
-              <h1>WPS AI Plugin</h1>
-              <p class="subtitle">WPS 智能助手 · 加载项发布页面</p>
-              <div class="plugin-list">
-                <a class="plugin-link" href="./wps-plugin-excel/">
-                  📊 WPS Excel 智能助手
-                  <small>wps-plugin-excel</small>
-                </a>
-                <a class="plugin-link" href="./wps-plugin-ppt/">
-                  📽️ WPS PPT 智能助手
-                  <small>wps-plugin-ppt</small>
-                </a>
-                <a class="plugin-link" href="./wps-plugin-word/">
-                  📝 WPS Word 智能助手
-                  <small>wps-plugin-word</small>
-                </a>
-              </div>
-            </div>
-          </body>
-          </html>
-          EOF
+          # 用 publish.html 作为入口页（WPS 加载项配置/安装页面）
+          cp publish.html _deploy/index.html
 
       - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v4

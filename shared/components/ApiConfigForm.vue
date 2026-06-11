@@ -4,7 +4,7 @@
       <a-form-item label="Base URL" name="baseURL" :rules="[{ required: true, message: '请输入 Base URL' }]">
         <a-input
           v-model:value="formState.baseURL"
-          placeholder="https://api.openai.com/v1"
+          placeholder="https://api.deepseek.com/v1/chat/completions"
           :disabled="isUrlLocked"
         />
       </a-form-item>
@@ -12,7 +12,7 @@
       <a-form-item label="Model" name="model" :rules="[{ required: true, message: '请输入 Model' }]">
         <a-input
           v-model:value="formState.model"
-          placeholder="gpt-4o / deepseek-v4-flash"
+          placeholder="deepseek-v4-flash"
         />
       </a-form-item>
 
