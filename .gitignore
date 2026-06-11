@@ -3,6 +3,8 @@ node_modules/
 
 # Build output
 dist/
+wps-addon-build/
+wps-addon-publish/
 
 # Environment files
 .env.local
