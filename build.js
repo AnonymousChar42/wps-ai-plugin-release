@@ -41,10 +41,10 @@ for (const plugin of plugins) {
   // 2. 安装依赖
   console.log('2. 安装项目依赖...');
   try {
-    execSync('npm install', { stdio: 'inherit' });
+    execSync('pnpm install', { stdio: 'inherit' });
     console.log('   依赖安装成功');
   } catch (error) {
-    console.error('npm install 失败，请检查错误信息。');
+    console.error('pnpm install 失败，请检查错误信息。');
     process.exit(1);
   }
 
